@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Mausam Essence</string>
     <string name="parent_package_name">com.abhitom.mausamessence</string>
+    <string name="content_description_search">for searching locations by city</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

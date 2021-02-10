@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/CCurrent"
+        android:title="Current"
+        android:icon="@drawable/ic_baseline_location_on_24"
+        app:showAsAction="always"
+        android:iconTint="@color/white"
+        />
+    <item android:id="@+id/CDate"
+        android:title="Date"
+        android:icon="@drawable/ic_baseline_date_range_24"
+        app:showAsAction="always"
+        android:iconTint="@color/white"
+        />
+    <item android:id="@+id/empty"
+        android:title=""/>
+    <item
+        android:id="@+id/C7Day"
+        android:icon="@drawable/ic_baseline_filter_7_24"
+        android:title="7-Day Report"
+        android:contentDescription="@string/content_description_search"
+        app:showAsAction="always"
+        android:iconTint="@color/white"
+        />
+    <item android:id="@+id/CSettings"
+        android:title="Settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        app:showAsAction="always"
+        android:iconTint="@color/white"
+        />
+</menu>
