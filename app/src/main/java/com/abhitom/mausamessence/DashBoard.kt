@@ -10,14 +10,17 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.abhitom.mausamessence.databinding.ActivityDashBoardBinding
-import com.abhitom.mausamessence.fragments.CurrentFragment
-import com.abhitom.mausamessence.fragments.DateFragment
-import com.abhitom.mausamessence.fragments.ReportFragment
-import com.abhitom.mausamessence.fragments.SettingsFragment
+import com.abhitom.mausamessence.fragments.*
+import com.abhitom.mausamessence.retrofit.OneCallResponse
+import com.abhitom.mausamessence.retrofit.RetroFitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class DashBoard : AppCompatActivity() {
@@ -27,6 +30,13 @@ class DashBoard : AppCompatActivity() {
     private lateinit var locationGps:Location
     private lateinit var locationNetwork:Location
     lateinit var finalLocation:Location
+    private var listenerCurrent: InterfaceCurrent? = null
+
+
+    fun setListenercurrent(listener: InterfaceCurrent?) {
+        this.listenerCurrent = listener
+    }
+
 
     companion object{
         var currentFragment= CurrentFragment()
@@ -34,6 +44,10 @@ class DashBoard : AppCompatActivity() {
         var dateFragment= DateFragment()
         var settingsFragment= SettingsFragment()
         lateinit var locationToShare:Location
+        var units="metric"
+        var isDataSaved=false
+        lateinit var data: Response<OneCallResponse>
+        var apiKey="22147f19dfcc656710c95cabb152527a"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +61,8 @@ class DashBoard : AppCompatActivity() {
 
         binding.bottomNavigationView.background = null
         binding.bottomNavigationView.menu.getItem(2).isEnabled = false
+
+        setListenercurrent(currentFragment)
 
         setCurrentFragment(currentFragment)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
@@ -66,6 +82,32 @@ class DashBoard : AppCompatActivity() {
             commit()
         }
 
+    //function to fetch data from api
+    fun getData(finalLocation: Location) {
+        RetroFitClient.instance.service.oneCallApi(finalLocation.latitude, finalLocation.longitude, apiKey, units)
+            .enqueue(object : Callback<OneCallResponse> {
+                override fun onResponse(
+                    call: Call<OneCallResponse>,
+                    response: Response<OneCallResponse>
+                ) {
+
+                    if (response.isSuccessful) {
+
+                        isDataSaved = true
+                        data = response
+                        listenerCurrent?.methodCurrent(response)
+                    } else {
+
+                        toastMaker(response.errorBody().toString(),currentFragment)
+                    }
+                }
+
+                override fun onFailure(call: Call<OneCallResponse>, t: Throwable) {
+                    toastMaker("No Internet / Server Down", currentFragment)
+                }
+            })
+    }
+
     //function to find user current location (NETWORK + GPS)
     fun getLocation() {
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -84,7 +126,7 @@ class DashBoard : AppCompatActivity() {
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION), 101)
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 101)
                     return
                 }
 
@@ -92,6 +134,7 @@ class DashBoard : AppCompatActivity() {
                     LocationListener {
                     override fun onLocationChanged(p0: Location) {
                         finalLocation = p0
+                        getData(finalLocation)
                     }
 
                     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
@@ -112,6 +155,7 @@ class DashBoard : AppCompatActivity() {
                     LocationListener {
                     override fun onLocationChanged(p0: Location) {
                         finalLocation = p0
+                        getData(finalLocation)
                     }
 
                     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
@@ -135,9 +179,16 @@ class DashBoard : AppCompatActivity() {
                 }
             if(this::finalLocation.isInitialized) {
                 locationToShare=finalLocation
+                getData(finalLocation)
             }
         } else {
             startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        }
+    }
+
+    private fun toastMaker(message: String?, Fragment: Fragment) {
+        if (Fragment.isVisible) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
     }
 
