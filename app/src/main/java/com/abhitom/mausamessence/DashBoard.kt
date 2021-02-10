@@ -17,10 +17,13 @@ import androidx.fragment.app.Fragment
 import com.abhitom.mausamessence.databinding.ActivityDashBoardBinding
 import com.abhitom.mausamessence.fragments.*
 import com.abhitom.mausamessence.retrofit.OneCallResponse
+import com.abhitom.mausamessence.retrofit.OneDay
 import com.abhitom.mausamessence.retrofit.RetroFitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class DashBoard : AppCompatActivity() {
@@ -31,12 +34,14 @@ class DashBoard : AppCompatActivity() {
     private lateinit var locationNetwork:Location
     lateinit var finalLocation:Location
     private var listenerCurrent: InterfaceCurrent? = null
-
+    private var listenerReport: InterfaceReport? = null
 
     fun setListenercurrent(listener: InterfaceCurrent?) {
         this.listenerCurrent = listener
     }
-
+    fun setListenerReport(listenerReport: InterfaceReport?) {
+        this.listenerReport = listenerReport
+    }
 
     companion object{
         var currentFragment= CurrentFragment()
@@ -47,6 +52,8 @@ class DashBoard : AppCompatActivity() {
         var units="metric"
         var isDataSaved=false
         lateinit var data: Response<OneCallResponse>
+        var reportList: MutableList<OneDay> = mutableListOf()
+        var isReportDone=false
         var apiKey="22147f19dfcc656710c95cabb152527a"
     }
 
@@ -63,6 +70,7 @@ class DashBoard : AppCompatActivity() {
         binding.bottomNavigationView.menu.getItem(2).isEnabled = false
 
         setListenercurrent(currentFragment)
+        setListenerReport(reportFragment)
 
         setCurrentFragment(currentFragment)
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
@@ -96,6 +104,7 @@ class DashBoard : AppCompatActivity() {
                         isDataSaved = true
                         data = response
                         listenerCurrent?.methodCurrent(response)
+                        getDataForReport(response)
                     } else {
 
                         toastMaker(response.errorBody().toString(),currentFragment)
@@ -106,6 +115,27 @@ class DashBoard : AppCompatActivity() {
                     toastMaker("No Internet / Server Down", currentFragment)
                 }
             })
+    }
+
+    private fun getDataForReport(response: Response<OneCallResponse>) {
+        var list: MutableList<OneDay> = mutableListOf()
+
+        for (i in 0 until response.body()?.daily?.size!!){
+            val day: Long = response.body()?.daily!![i]?.dt.let { it?.let { it1 -> java.lang.Long.valueOf(it1) } }!! * 1000
+            val daydf = Date(day)
+            val dayOfWeek = SimpleDateFormat("EEEE").format(daydf)
+            val date = SimpleDateFormat("dd/MM").format(daydf)
+            val sunrise: Long = response.body()?.daily!![i]?.sunrise.let { it?.let { it1 -> java.lang.Long.valueOf(it1) } }!! * 1000
+            val sunrisedf = Date(sunrise)
+            val sunset: Long = response.body()?.daily!![i]?.sunset.let { it?.let { it1 -> java.lang.Long.valueOf(it1) } }!! * 1000
+            val sunsetdf = Date(sunset)
+            val sunrisevv = SimpleDateFormat("hh:mm a").format(sunrisedf)
+            val sunsetvv = SimpleDateFormat("hh:mm a").format(sunsetdf)
+            list.add(OneDay(dayOfWeek, date, sunrisevv, sunsetvv, response.body()!!.daily?.get(i)?.temp?.max.toString(), response.body()!!.daily?.get(i)?.temp?.max.toString(), response.body()!!.daily?.get(i)?.windSpeed.toString() ))
+        }
+        isReportDone=true
+        reportList=list
+        listenerReport?.methodReport(list)
     }
 
     //function to find user current location (NETWORK + GPS)
