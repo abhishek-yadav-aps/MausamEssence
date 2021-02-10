@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.abhitom.mausamessence.DashBoard
 import com.abhitom.mausamessence.R
@@ -53,24 +54,16 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
 
         when {
             (currentTimeFormat.toInt()>6) and (currentTimeFormat.toInt()<12) -> {
-                if (DashBoard.currentFragment.isVisible) {
                     _binding?.clCFLayout?.background = context?.let { ContextCompat.getDrawable(it, R.drawable.sunrisehd) }
-                }
             }
             (currentTimeFormat.toInt()>=16) and (currentTimeFormat.toInt()<21) -> {
-                if (DashBoard.currentFragment.isVisible) {
                     _binding?.clCFLayout?.background = context?.let { ContextCompat.getDrawable(it, R.drawable.sunsethd) }
-                }
             }
             (currentTimeFormat.toInt()>=12) and (currentTimeFormat.toInt()<16) -> {
-                if (DashBoard.currentFragment.isVisible) {
                     _binding?.clCFLayout?.background = context?.let { ContextCompat.getDrawable(it, R.drawable.noonhd) }
-                }
             }
             else -> {
-                if (DashBoard.currentFragment.isVisible) {
                     _binding?.clCFLayout?.background = context?.let { ContextCompat.getDrawable(it, R.drawable.nighthd) }
-                }
             }
         }
     }
@@ -89,8 +82,9 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
         val sunsetdf = Date(sunset)
         val sunsetvv = SimpleDateFormat("hh:mm a").format(sunsetdf)
         _binding?.txtSunset?.text=sunsetvv
+        _binding?.txtUsername?.text="Hi, "+DashBoard.userName
         if (DashBoard.units=="metric"){
-            val feelsLike=response.body()?.current?.feelsLike.toString()+" C"
+            val feelsLike=response.body()?.current?.feelsLike.toString()+" °C"
             val windSpeed=response.body()?.current?.windSpeed.toString()+" m/s"
             _binding?.txtFeelsLike?.text= feelsLike
             _binding?.txtHumidity?.text= response.body()?.current?.humidity.toString()
@@ -98,8 +92,12 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
             _binding?.txtVisiblity?.text= response.body()?.current?.visibility.toString()
             _binding?.txtWindSpeed?.text= windSpeed
             _binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+            val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °C"
+            val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °C"
+            _binding?.txtMinTemp?.text=minTemp
+            _binding?.txtMaxTemp?.text=maxTemp
         }else{
-            val feelsLike=response.body()?.current?.feelsLike.toString()+" F"
+            val feelsLike=response.body()?.current?.feelsLike.toString()+" °F"
             val windSpeed=response.body()?.current?.windSpeed.toString()+" miles/s"
             _binding?.txtFeelsLike?.text= feelsLike
             _binding?.txtHumidity?.text= response.body()?.current?.humidity.toString()
@@ -107,6 +105,10 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
             _binding?.txtVisiblity?.text= response.body()?.current?.visibility.toString()
             _binding?.txtWindSpeed?.text= windSpeed
             _binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+            val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °F"
+            val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °F"
+            _binding?.txtMinTemp?.text=minTemp
+            _binding?.txtMaxTemp?.text=maxTemp
         }
     }
 

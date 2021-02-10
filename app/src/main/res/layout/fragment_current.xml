@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clCFLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sunrisehd"
-    android:id="@+id/clCFLayout"
+    android:background="@drawable/noonhd"
     tools:context=".fragments.CurrentFragment">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/copse"
+        android:fontFamily="@font/arbutus"
         android:text="Location"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,9 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="C"
-        android:textSize="36sp"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_temp"
+        android:text="°C"
+        android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/txt_temp"
         app:layout_constraintTop_toTopOf="@+id/txt_temp" />
 
@@ -74,6 +73,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
@@ -143,7 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="16 F"
+                android:text="16 °C"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView9"
@@ -259,12 +259,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:fontFamily="@font/copse"
+        android:fontFamily="@font/arbutus"
         android:text="Hi, Abhishek!"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_max_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text=" 30 °C"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_weather"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_weather" />
+
+    <TextView
+        android:id="@+id/txt_min_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="20 °C"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_weather"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_weather" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

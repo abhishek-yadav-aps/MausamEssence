@@ -3,6 +3,7 @@ package com.abhitom.mausamessence
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -35,6 +36,7 @@ class DashBoard : AppCompatActivity() {
     lateinit var finalLocation:Location
     private var listenerCurrent: InterfaceCurrent? = null
     private var listenerReport: InterfaceReport? = null
+    private lateinit var prefs: SharedPreferences
 
     fun setListenercurrent(listener: InterfaceCurrent?) {
         this.listenerCurrent = listener
@@ -55,6 +57,7 @@ class DashBoard : AppCompatActivity() {
         var reportList: MutableList<OneDay> = mutableListOf()
         var isReportDone=false
         var apiKey="22147f19dfcc656710c95cabb152527a"
+        var userName=""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +68,12 @@ class DashBoard : AppCompatActivity() {
         setContentView(view)
 
         getLocation()
+
+        prefs=this.getSharedPreferences(
+            getString(R.string.parent_package_name),
+            Context.MODE_PRIVATE
+        )
+        userName= prefs.getString("Name", "").toString()
 
         binding.bottomNavigationView.background = null
         binding.bottomNavigationView.menu.getItem(2).isEnabled = false
