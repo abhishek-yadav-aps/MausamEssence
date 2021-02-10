@@ -31,8 +31,17 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBackground()
+        checkTemp()
         if (DashBoard.isDataSaved){
             showData(DashBoard.data)
+        }
+    }
+
+    private fun checkTemp() {
+        if (DashBoard.units=="metric"){
+            _binding?.txtDegree?.text="C"
+        }else{
+            _binding?.txtDegree?.text="F"
         }
     }
 
