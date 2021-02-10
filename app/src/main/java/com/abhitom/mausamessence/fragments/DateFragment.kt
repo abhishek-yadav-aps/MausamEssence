@@ -12,10 +12,17 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.abhitom.mausamessence.DashBoard
 import com.abhitom.mausamessence.R
 import com.abhitom.mausamessence.databinding.FragmentDateBinding
+import com.abhitom.mausamessence.retrofit.OneCallResponse
+import com.abhitom.mausamessence.retrofit.RetroFitClient
+import com.google.android.gms.maps.model.LatLng
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,6 +35,9 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
     lateinit var datePickerDialog: DatePickerDialog
     private var cities:MutableList<String> = mutableListOf()
     var currentCity = 0
+    val mumbaiLoc= LatLng(19.01441,72.847939)
+    val noidaLoc= LatLng(28.496149,77.536011)
+    val delhiLoc= LatLng(28.666668,77.216667)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,14 +56,26 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
         cities.add("Delhi")
         cities.add("Mumbai")
         cities.add("Noida")
-        if(currentCity == 0){
-            HideThem()
-        }
+        HideThem()
+
+        binding?.txtUsername1!!.text="Hi, "+DashBoard.userName
 
         val cityArrayAdapter = ArrayAdapter<String>(context!!, R.layout.spinner_text_item, cities)
         binding?.spinCity?.adapter = cityArrayAdapter
         binding?.spinCity?.onItemSelectedListener = this
         binding?.spinCity?.setSelection(0, false)
+
+        val currentDate: Long = java.lang.Long.valueOf(System.currentTimeMillis())
+        val currentDatedf = Date(currentDate)
+        val currentDatevv = SimpleDateFormat("dd-MM-yyyy").format(currentDatedf)
+        binding?.tvDFDate?.text=currentDatevv
+
+        val currentdd = SimpleDateFormat("dd").format(currentDatedf)
+        val currentmm = SimpleDateFormat("MM").format(currentDatedf)
+        val currentyy= SimpleDateFormat("yyyy").format(currentDatedf)
+        dayOfMonthsaver=currentdd.toInt()
+        monthsaver=currentmm.toInt()-1
+        yearsaver=currentyy.toInt()
 
         btnSearchOnClickListener()
 
@@ -78,20 +100,98 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
         }
     }
 
+    private fun getData(loc: LatLng) {
+        RetroFitClient.instance.service.oneCallApi(loc.latitude, loc.longitude, DashBoard.apiKey, DashBoard.units)
+            .enqueue(object : Callback<OneCallResponse> {
+                override fun onResponse(
+                    call: Call<OneCallResponse>,
+                    response: Response<OneCallResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        showData(response)
+                    } else {
+                        toastMaker(response.errorBody().toString(), DashBoard.dateFragment)
+                    }
+                }
+
+                override fun onFailure(call: Call<OneCallResponse>, t: Throwable) {
+                    toastMaker("No Internet / Server Down", DashBoard.dateFragment)
+                }
+            })
+
+    }
+
+    private fun toastMaker(message: String?, Fragment: Fragment) {
+        if (Fragment.isVisible) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun btnSearchOnClickListener() {
         binding?.btnSearch?.setOnClickListener {
             when(currentCity){
                 0 -> {
                     HideThem()
                 }
-                1 -> {
+                1 ->{
+                    getData(delhiLoc)
                     ShowThem()
                 }
                 2->{
+                    getData(mumbaiLoc)
                     ShowThem()
                 }
                 3->{
+                    getData(noidaLoc)
                     ShowThem()
+                }
+            }
+        }
+    }
+
+    private fun showData(response: Response<OneCallResponse>) {
+        for (i in response.body()?.daily?.indices!!){
+            val sunrise: Long = response.body()?.daily!![i]?.dt.let { java.lang.Long.valueOf(it!!) }!! * 1000
+            val sunrisedf = Date(sunrise)
+            val sunrisedd = SimpleDateFormat("dd").format(sunrisedf)
+            val sunriseMM = SimpleDateFormat("MM").format(sunrisedf)
+            val sunriseyy = SimpleDateFormat("yyyy").format(sunrisedf)
+            if (sunrisedd.toInt()==dayOfMonthsaver && sunriseMM.toInt()==(monthsaver+1) && sunriseyy.toInt()==yearsaver){
+
+                binding?.txtTemp?.text= response.body()?.current?.temp.toString()
+                binding?.txtWeather?.text= response.body()?.current?.weather?.get(0)?.main
+                val sunris: Long = response.body()?.current?.sunrise?.let { java.lang.Long.valueOf(it) }!! * 1000
+                val sunrisdf = Date(sunris)
+                val sunrisvv = SimpleDateFormat("hh:mm a").format(sunrisdf)
+                binding?.txtSunrise?.text=sunrisvv
+                val sunset: Long = response.body()?.current?.sunset?.let { java.lang.Long.valueOf(it) }!! * 1000
+                val sunsetdf = Date(sunset)
+                val sunsetvv = SimpleDateFormat("hh:mm a").format(sunsetdf)
+                binding?.txtSunset?.text=sunsetvv
+                if (DashBoard.units=="metric"){
+                    binding?.txtDegree?.text="C"
+                    binding?.txtFeelsLike?.text= response.body()?.current?.feelsLike.toString()+" °C"
+                    binding?.txtHumidity?.text= response.body()?.current?.humidity.toString()
+                    binding?.txtPressure?.text= response.body()?.current?.pressure.toString()
+                    binding?.txtVisiblity?.text= response.body()?.current?.visibility.toString()
+                    binding?.txtWindSpeed?.text= response.body()?.current?.windSpeed.toString()+" m/s"
+                    binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+                    val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °C"
+                    val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °C"
+                    binding?.txtDateMin?.text=minTemp
+                    binding?.txtDateMax?.text=maxTemp
+                }else{
+                    binding?.txtDegree?.text="F"
+                    binding?.txtFeelsLike?.text= response.body()?.current?.feelsLike.toString()+" °F"
+                    binding?.txtHumidity?.text= response.body()?.current?.humidity.toString()
+                    binding?.txtPressure?.text= response.body()?.current?.pressure.toString()
+                    binding?.txtVisiblity?.text= response.body()?.current?.visibility.toString()
+                    binding?.txtWindSpeed?.text= response.body()?.current?.windSpeed.toString()+" miles/s"
+                    binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+                    val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °F"
+                    val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °F"
+                    binding?.txtDateMin?.text=minTemp
+                    binding?.txtDateMax?.text=maxTemp
                 }
             }
         }

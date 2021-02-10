@@ -74,14 +74,17 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
         _binding?.txtLocation?.text=response.body()?.timezone
         _binding?.txtTemp?.text= response.body()?.current?.temp.toString()
         _binding?.txtWeather?.text= response.body()?.current?.weather?.get(0)?.main
+
         val sunrise: Long = response.body()?.current?.sunrise?.let { java.lang.Long.valueOf(it) }!! * 1000
         val sunrisedf = Date(sunrise)
         val sunrisevv = SimpleDateFormat("hh:mm a").format(sunrisedf)
         _binding?.txtSunrise?.text=sunrisevv
+
         val sunset: Long = response.body()?.current?.sunset?.let { java.lang.Long.valueOf(it) }!! * 1000
         val sunsetdf = Date(sunset)
         val sunsetvv = SimpleDateFormat("hh:mm a").format(sunsetdf)
         _binding?.txtSunset?.text=sunsetvv
+
         _binding?.txtUsername?.text="Hi, "+DashBoard.userName
         if (DashBoard.units=="metric"){
             val feelsLike=response.body()?.current?.feelsLike.toString()+" °C"
