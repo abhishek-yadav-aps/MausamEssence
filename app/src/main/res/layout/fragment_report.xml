@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/sunrisehd"
     android:id="@+id/clReportLayout"
+
     tools:context=".fragments.ReportFragment">
 
     <TextView

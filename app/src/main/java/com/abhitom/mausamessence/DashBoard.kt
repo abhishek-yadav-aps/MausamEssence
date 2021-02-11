@@ -94,6 +94,11 @@ class DashBoard : AppCompatActivity() {
             }
             true
         }
+        binding.fab.setOnClickListener {
+            binding.bottomNavigationView.selectedItemId=R.id.CCurrent
+            setCurrentFragment(currentFragment)
+            getLocation()
+        }
     }
 
     private fun setCurrentFragment(fragment: Fragment)=

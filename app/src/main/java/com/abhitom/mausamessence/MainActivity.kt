@@ -43,17 +43,18 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()
 
         btnMAStartOnClickListener()
+
     }
 
     private fun btnMAStartOnClickListener() {
         binding.btnMAStart.setOnClickListener {
-            val name=prefs.getString("Name", "")
-            if(name=="") {
-                val intent= Intent(this, UserActivity::class.java)
+            val name = prefs.getString("Name", "")
+            if (name == "") {
+                val intent = Intent(this, UserActivity::class.java)
                 intent.clearStack()
                 startActivity(intent)
-            }else{
-                val intent= Intent(this, DashBoard::class.java)
+            } else {
+                val intent = Intent(this, DashBoard::class.java)
                 intent.clearStack()
                 startActivity(intent)
             }
@@ -107,6 +108,8 @@ class MainActivity : AppCompatActivity() {
                         resolvableApiException.startResolutionForResult(
                                 this, 101
                         )
+
+
                     } catch (e: IntentSender.SendIntentException) {
                         Toast.makeText(
                                 this,
@@ -115,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                         ).show()
                     }
                     LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+
                         Toast.makeText(
                                 this,
                                 "Something is wrong in your GPS",
@@ -124,7 +128,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode==101){
+            if (resultCode == 0) {
+                onDestroy()
+            }
+        }
+    }
+
 
     override fun onRequestPermissionsResult(
             requestCode: Int,

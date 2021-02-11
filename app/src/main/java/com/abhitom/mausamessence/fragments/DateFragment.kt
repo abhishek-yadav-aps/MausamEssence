@@ -3,6 +3,7 @@ package com.abhitom.mausamessence.fragments
 import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +51,7 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
         changeBackground()
 
         cities.clear()
-        cities.add("Select City..")
+        cities.add("Select City")
         cities.add("Delhi")
         cities.add("Mumbai")
         cities.add("Noida")
@@ -156,41 +157,41 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
             val sunriseMM = SimpleDateFormat("MM").format(sunrisedf)
             val sunriseyy = SimpleDateFormat("yyyy").format(sunrisedf)
             if (sunrisedd.toInt()==dayOfMonthSaver && sunriseMM.toInt()==(monthSaver+1) && sunriseyy.toInt()==yearSaver){
-
-                binding?.txtTemp?.text= response.body()?.current?.temp.toString()
-                binding?.txtWeather?.text= response.body()?.current?.weather?.get(0)?.main
-                val sunris: Long = response.body()?.current?.sunrise?.let { java.lang.Long.valueOf(it) }!! * 1000
+                Log.i("TAGGERRR", "$sunrisedd ${sunriseMM.toInt()} $sunriseyy - $dayOfMonthSaver ${monthSaver+1} $yearSaver")
+                binding?.txtTemp?.text= response.body()?.daily!![i]?.temp?.day.toString()
+                binding?.txtWeather?.text= response.body()?.daily!![i]?.weather?.get(0)?.main
+                val sunris: Long = response.body()?.daily!![i]?.sunrise?.let { java.lang.Long.valueOf(it) }!! * 1000
                 val sunrisdf = Date(sunris)
                 val sunrisvv = SimpleDateFormat("hh:mm a").format(sunrisdf)
                 binding?.txtSunrise?.text=sunrisvv
-                val sunset: Long = response.body()?.current?.sunset?.let { java.lang.Long.valueOf(it) }!! * 1000
+                val sunset: Long = response.body()?.daily!![i]?.sunset?.let { java.lang.Long.valueOf(it) }!! * 1000
                 val sunsetdf = Date(sunset)
                 val sunsetvv = SimpleDateFormat("hh:mm a").format(sunsetdf)
                 binding?.txtSunset?.text=sunsetvv
 
-                val humidity=response.body()?.current?.humidity.toString()+"%"
-                val pressure=response.body()?.current?.pressure.toString()+" hPa"
-                val visibility=response.body()?.current?.visibility.toString()+"m"
+                val humidity=response.body()?.daily!![i]?.humidity.toString()+"%"
+                val pressure=response.body()?.daily!![i]?.pressure.toString()+" hPa"
+                val visibility=response.body()?.daily!![i]?.clouds.toString()
                 binding?.txtHumidity?.text= humidity
                 binding?.txtPressure?.text= pressure
                 binding?.txtVisiblity?.text= visibility
-                binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+                binding?.txtUv?.text= response.body()?.daily!![i]?.uvi.toString()
 
                 if (DashBoard.units=="metric"){
-                    val feelsLike=response.body()?.current?.feelsLike.toString()+" °C"
-                    val windSpeed=response.body()?.current?.windSpeed.toString()+" m/s"
-                    val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °C"
-                    val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °C"
+                    val feelsLike=response.body()?.daily!![i]?.feelsLike?.day.toString()+" °C"
+                    val windSpeed=response.body()?.daily!![i]?.windSpeed.toString()+" m/s"
+                    val minTemp= response.body()!!.daily?.get(i)?.temp?.min.toString() + " °C"
+                    val maxTemp= response.body()!!.daily?.get(i)?.temp?.max.toString() + " °C"
                     binding?.txtFeelsLike?.text= feelsLike
                     binding?.txtWindSpeed?.text= windSpeed
                     binding?.txtDateMin?.text=minTemp
                     binding?.txtDateMax?.text=maxTemp
                     binding?.txtDegree?.text="°C"
                 }else{
-                    val feelsLike=response.body()?.current?.feelsLike.toString()+" °F"
-                    val windSpeed=response.body()?.current?.windSpeed.toString()+" miles/s"
-                    val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °F"
-                    val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °F"
+                    val feelsLike=response.body()?.daily!![i]?.feelsLike?.day.toString()+" °F"
+                    val windSpeed=response.body()?.daily!![i]?.windSpeed.toString()+" miles/s"
+                    val minTemp= response.body()!!.daily?.get(i)?.temp?.min.toString() + " °F"
+                    val maxTemp= response.body()!!.daily?.get(i)?.temp?.max.toString() + " °F"
                     binding?.txtFeelsLike?.text= feelsLike
                     binding?.txtWindSpeed?.text= windSpeed
                     binding?.txtDateMin?.text=minTemp

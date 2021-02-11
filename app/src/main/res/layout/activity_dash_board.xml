@@ -38,8 +38,8 @@
   <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:srcCompat="@drawable/ic_baseline_search_24"
-      app:layout_anchor="@id/bottomAppBar"
-      android:contentDescription="@string/content_description_search" />
+      app:srcCompat="@drawable/ic_baseline_refresh_24"
+      android:id="@+id/fab"
+      app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
