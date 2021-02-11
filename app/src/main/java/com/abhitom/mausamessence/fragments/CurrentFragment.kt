@@ -10,6 +10,7 @@ import com.abhitom.mausamessence.DashBoard
 import com.abhitom.mausamessence.R
 import com.abhitom.mausamessence.databinding.FragmentCurrentBinding
 import com.abhitom.mausamessence.retrofit.OneCallResponse
+import com.google.android.gms.maps.model.Dash
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
@@ -64,6 +65,8 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
     private fun showData(response: Response<OneCallResponse>) {
         if (!DashBoard.isCityFetched) {
             _binding?.txtLocation?.text = response.body()?.timezone
+        }else{
+            _binding?.txtLocation?.text = DashBoard.currentCity
         }
         _binding?.txtTemp?.text= response.body()?.current?.temp.toString()
         _binding?.txtWeather?.text= response.body()?.current?.weather?.get(0)?.main

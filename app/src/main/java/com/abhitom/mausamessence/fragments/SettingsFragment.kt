@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.abhitom.mausamessence.DashBoard
 import com.abhitom.mausamessence.R
@@ -19,12 +18,12 @@ import java.util.*
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
-    lateinit var prefs:SharedPreferences
+    private lateinit var prefs:SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return _binding!!.root
@@ -41,13 +40,14 @@ class SettingsFragment : Fragment() {
                 Context.MODE_PRIVATE
             )
         }
-        val userNameText="Hi, "+DashBoard.userName
+        val userNameText="Hi, "+DashBoard.userName+"!"
         _binding?.txtUsername!!.text=userNameText
         _binding?.textInputUserName?.editText?.setText(DashBoard.userName)
         _binding?.btnSFSave?.setOnClickListener {
             if (!_binding!!.textInputUserName.editText?.text.isNullOrEmpty() || !_binding!!.textInputUserName.editText?.text.isNullOrBlank()) {
                 DashBoard.userName = _binding!!.textInputUserName.editText?.text.toString()
-                _binding!!.txtUsername.text="Hi, "+DashBoard.userName
+                val userNameText1="Hi, "+DashBoard.userName+"!"
+                _binding?.txtUsername!!.text=userNameText1
                 _binding?.textInputUserName?.editText?.setText(_binding!!.textInputUserName.editText?.text.toString())
                 prefs.edit()
                     .putString("Name", _binding!!.textInputUserName.editText?.text.toString())
@@ -86,7 +86,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun toggleButtonCheckListener() {
-        _binding?.toggleButton?.setOnCheckedChangeListener { buttonView, isChecked ->
+        _binding?.toggleButton?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
                 DashBoard.units="imperial"
                 (activity as DashBoard?)?.getLocation()

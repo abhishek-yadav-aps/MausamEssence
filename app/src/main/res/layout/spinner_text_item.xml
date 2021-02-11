@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/spinner_background"
+    android:fontFamily="@font/roboto_mono"
     android:gravity="center"
     android:padding="10dp"
     android:textColor="@color/white"

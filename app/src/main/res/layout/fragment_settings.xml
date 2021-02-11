@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:fontFamily="@font/arbutus"
+        android:fontFamily="@font/roboto_mono"
         android:text="Hi, Abhishek!"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,9 +28,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:background="#8E52E0"
+        android:fontFamily="@font/roboto_mono"
         android:textAllCaps="true"
         android:textOff="°C"
-        android:textOn="F"
+        android:textOn="°F"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textView4"
@@ -42,9 +43,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_mono"
         android:text="Profile Settings:"
         android:textSize="24sp"
-        android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_username" />
 
@@ -73,6 +74,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_mono"
             android:hint="Username" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,9 +84,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_mono"
         android:text="Application Settings:"
         android:textSize="24sp"
-        android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputUserName" />
 
@@ -103,15 +105,16 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/roboto_mono"
         android:text="Temperature Unit in Fahrenheit or in Celsius:"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
     <Button
@@ -121,6 +124,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:backgroundTint="#F8F7F7"
+        android:fontFamily="@font/roboto_mono"
         android:text="SAVE"
         android:textColor="#040404"
         app:layout_constraintEnd_toEndOf="parent"
