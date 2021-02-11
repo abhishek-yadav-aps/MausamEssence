@@ -1,13 +1,11 @@
 package com.abhitom.mausamessence.fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.abhitom.mausamessence.DashBoard
 import com.abhitom.mausamessence.R
 import com.abhitom.mausamessence.databinding.FragmentCurrentBinding
@@ -22,8 +20,8 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
     private var _binding: FragmentCurrentBinding? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentCurrentBinding.inflate(inflater, container, false)
@@ -32,19 +30,13 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBackground()
-        checkTemp()
         if (DashBoard.isDataSaved){
             showData(DashBoard.data)
         }
+
     }
 
-    private fun checkTemp() {
-        if (DashBoard.units=="metric"){
-            _binding?.txtDegree?.text="C"
-        }else{
-            _binding?.txtDegree?.text="F"
-        }
-    }
+
 
     // function to change background automatically wrt time
     private fun changeBackground() {
@@ -70,8 +62,9 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
 
     // function to display data
     private fun showData(response: Response<OneCallResponse>) {
-        Log.i("TAGGER","SHOW DATA")
-        _binding?.txtLocation?.text=response.body()?.timezone
+        if (!DashBoard.isCityFetched) {
+            _binding?.txtLocation?.text = response.body()?.timezone
+        }
         _binding?.txtTemp?.text= response.body()?.current?.temp.toString()
         _binding?.txtWeather?.text= response.body()?.current?.weather?.get(0)?.main
 
@@ -85,41 +78,57 @@ class CurrentFragment : Fragment(),InterfaceCurrent {
         val sunsetvv = SimpleDateFormat("hh:mm a").format(sunsetdf)
         _binding?.txtSunset?.text=sunsetvv
 
-        _binding?.txtUsername?.text="Hi, "+DashBoard.userName
+        val userNameText="Hi, "+DashBoard.userName+"!"
+        _binding?.txtUsername?.text=userNameText
+
+        val humidity=response.body()?.current?.humidity.toString()+"%"
+        val pressure=response.body()?.current?.pressure.toString()+" hPa"
+        val visibility=response.body()?.current?.visibility.toString()+"m"
+        _binding?.txtHumidity?.text= humidity
+        _binding?.txtPressure?.text= pressure
+        _binding?.txtVisiblity?.text= visibility
+        _binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+
         if (DashBoard.units=="metric"){
             val feelsLike=response.body()?.current?.feelsLike.toString()+" °C"
             val windSpeed=response.body()?.current?.windSpeed.toString()+" m/s"
-            _binding?.txtFeelsLike?.text= feelsLike
-            _binding?.txtHumidity?.text= response.body()?.current?.humidity.toString()
-            _binding?.txtPressure?.text= response.body()?.current?.pressure.toString()
-            _binding?.txtVisiblity?.text= response.body()?.current?.visibility.toString()
-            _binding?.txtWindSpeed?.text= windSpeed
-            _binding?.txtUv?.text= response.body()?.current?.uvi.toString()
             val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °C"
             val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °C"
+            _binding?.txtFeelsLike?.text= feelsLike
+            _binding?.txtWindSpeed?.text= windSpeed
             _binding?.txtMinTemp?.text=minTemp
             _binding?.txtMaxTemp?.text=maxTemp
+            _binding?.txtDegree?.text="°C"
         }else{
             val feelsLike=response.body()?.current?.feelsLike.toString()+" °F"
             val windSpeed=response.body()?.current?.windSpeed.toString()+" miles/s"
-            _binding?.txtFeelsLike?.text= feelsLike
-            _binding?.txtHumidity?.text= response.body()?.current?.humidity.toString()
-            _binding?.txtPressure?.text= response.body()?.current?.pressure.toString()
-            _binding?.txtVisiblity?.text= response.body()?.current?.visibility.toString()
-            _binding?.txtWindSpeed?.text= windSpeed
-            _binding?.txtUv?.text= response.body()?.current?.uvi.toString()
             val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °F"
             val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °F"
+            _binding?.txtFeelsLike?.text= feelsLike
+            _binding?.txtWindSpeed?.text= windSpeed
             _binding?.txtMinTemp?.text=minTemp
             _binding?.txtMaxTemp?.text=maxTemp
+            _binding?.txtDegree?.text="°F"
         }
     }
 
+    //interface method
     override fun methodCurrent(response: Response<OneCallResponse>) {
         showData(response)
+    }
+
+    override fun methodCurrentCity(currentCity: String, b: Boolean) {
+        if (b) {
+            showCity(currentCity)
+        }
+    }
+
+    private fun showCity(currentCity: String) {
+        _binding?.txtLocation?.text = currentCity
     }
 }
 
 interface InterfaceCurrent {
     fun methodCurrent(response: Response<OneCallResponse>)
+    fun methodCurrentCity(currentCity: String, b: Boolean)
 }

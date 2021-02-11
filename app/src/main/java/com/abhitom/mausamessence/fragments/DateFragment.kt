@@ -1,10 +1,8 @@
 package com.abhitom.mausamessence.fragments
 
 import android.app.DatePickerDialog
-import android.content.ContentValues
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,16 +26,16 @@ import java.util.*
 
 class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
 
-    private var monthsaver: Int=0
-    private var yearsaver: Int=0
-    var dayOfMonthsaver: Int=0
+    private var monthSaver: Int=0
+    private var yearSaver: Int=0
+    private var dayOfMonthSaver: Int=0
     private var binding: FragmentDateBinding? = null
-    lateinit var datePickerDialog: DatePickerDialog
+    private lateinit var datePickerDialog: DatePickerDialog
     private var cities:MutableList<String> = mutableListOf()
-    var currentCity = 0
-    val mumbaiLoc= LatLng(19.01441,72.847939)
-    val noidaLoc= LatLng(28.496149,77.536011)
-    val delhiLoc= LatLng(28.666668,77.216667)
+    private var currentCity = 0
+    private val mumbaiLoc= LatLng(19.01441,72.847939)
+    private val noidaLoc= LatLng(28.496149,77.536011)
+    private val delhiLoc= LatLng(28.666668,77.216667)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,12 +56,13 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
         cities.add("Noida")
         HideThem()
 
-        binding?.txtUsername1!!.text="Hi, "+DashBoard.userName
+        val userNameText="Hi, "+DashBoard.userName+"!"
+        binding?.txtUsername1!!.text=userNameText
 
-        val cityArrayAdapter = ArrayAdapter<String>(context!!, R.layout.spinner_text_item, cities)
+        val cityArrayAdapter = ArrayAdapter(context!!, R.layout.spinner_text_item, cities)
         binding?.spinCity?.adapter = cityArrayAdapter
         binding?.spinCity?.onItemSelectedListener = this
-        binding?.spinCity?.setSelection(0, false)
+        binding?.spinCity?.setSelection(0, true)
 
         val currentDate: Long = java.lang.Long.valueOf(System.currentTimeMillis())
         val currentDatedf = Date(currentDate)
@@ -73,9 +72,9 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
         val currentdd = SimpleDateFormat("dd").format(currentDatedf)
         val currentmm = SimpleDateFormat("MM").format(currentDatedf)
         val currentyy= SimpleDateFormat("yyyy").format(currentDatedf)
-        dayOfMonthsaver=currentdd.toInt()
-        monthsaver=currentmm.toInt()-1
-        yearsaver=currentyy.toInt()
+        dayOfMonthSaver=currentdd.toInt()
+        monthSaver=currentmm.toInt()-1
+        yearSaver=currentyy.toInt()
 
         btnSearchOnClickListener()
 
@@ -156,7 +155,7 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
             val sunrisedd = SimpleDateFormat("dd").format(sunrisedf)
             val sunriseMM = SimpleDateFormat("MM").format(sunrisedf)
             val sunriseyy = SimpleDateFormat("yyyy").format(sunrisedf)
-            if (sunrisedd.toInt()==dayOfMonthsaver && sunriseMM.toInt()==(monthsaver+1) && sunriseyy.toInt()==yearsaver){
+            if (sunrisedd.toInt()==dayOfMonthSaver && sunriseMM.toInt()==(monthSaver+1) && sunriseyy.toInt()==yearSaver){
 
                 binding?.txtTemp?.text= response.body()?.current?.temp.toString()
                 binding?.txtWeather?.text= response.body()?.current?.weather?.get(0)?.main
@@ -168,30 +167,35 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
                 val sunsetdf = Date(sunset)
                 val sunsetvv = SimpleDateFormat("hh:mm a").format(sunsetdf)
                 binding?.txtSunset?.text=sunsetvv
+
+                val humidity=response.body()?.current?.humidity.toString()+"%"
+                val pressure=response.body()?.current?.pressure.toString()+" hPa"
+                val visibility=response.body()?.current?.visibility.toString()+"m"
+                binding?.txtHumidity?.text= humidity
+                binding?.txtPressure?.text= pressure
+                binding?.txtVisiblity?.text= visibility
+                binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+
                 if (DashBoard.units=="metric"){
-                    binding?.txtDegree?.text="C"
-                    binding?.txtFeelsLike?.text= response.body()?.current?.feelsLike.toString()+" °C"
-                    binding?.txtHumidity?.text= response.body()?.current?.humidity.toString()
-                    binding?.txtPressure?.text= response.body()?.current?.pressure.toString()
-                    binding?.txtVisiblity?.text= response.body()?.current?.visibility.toString()
-                    binding?.txtWindSpeed?.text= response.body()?.current?.windSpeed.toString()+" m/s"
-                    binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+                    val feelsLike=response.body()?.current?.feelsLike.toString()+" °C"
+                    val windSpeed=response.body()?.current?.windSpeed.toString()+" m/s"
                     val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °C"
                     val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °C"
+                    binding?.txtFeelsLike?.text= feelsLike
+                    binding?.txtWindSpeed?.text= windSpeed
                     binding?.txtDateMin?.text=minTemp
                     binding?.txtDateMax?.text=maxTemp
+                    binding?.txtDegree?.text="°C"
                 }else{
-                    binding?.txtDegree?.text="F"
-                    binding?.txtFeelsLike?.text= response.body()?.current?.feelsLike.toString()+" °F"
-                    binding?.txtHumidity?.text= response.body()?.current?.humidity.toString()
-                    binding?.txtPressure?.text= response.body()?.current?.pressure.toString()
-                    binding?.txtVisiblity?.text= response.body()?.current?.visibility.toString()
-                    binding?.txtWindSpeed?.text= response.body()?.current?.windSpeed.toString()+" miles/s"
-                    binding?.txtUv?.text= response.body()?.current?.uvi.toString()
+                    val feelsLike=response.body()?.current?.feelsLike.toString()+" °F"
+                    val windSpeed=response.body()?.current?.windSpeed.toString()+" miles/s"
                     val minTemp= response.body()!!.daily?.get(0)?.temp?.min.toString() + " °F"
                     val maxTemp= response.body()!!.daily?.get(0)?.temp?.max.toString() + " °F"
+                    binding?.txtFeelsLike?.text= feelsLike
+                    binding?.txtWindSpeed?.text= windSpeed
                     binding?.txtDateMin?.text=minTemp
                     binding?.txtDateMax?.text=maxTemp
+                    binding?.txtDegree?.text="°F"
                 }
             }
         }
@@ -246,9 +250,9 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         binding?.tvDFDate?.text=dayOfMonth.toString()+"-"+(month+1).toString()+"-"+year.toString()
-        dayOfMonthsaver=dayOfMonth
-        yearsaver=year
-        monthsaver=month
+        dayOfMonthSaver=dayOfMonth
+        yearSaver=year
+        monthSaver=month
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

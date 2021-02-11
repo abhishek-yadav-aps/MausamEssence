@@ -8,19 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.abhitom.mausamessence.DashBoard
 import com.abhitom.mausamessence.R
 import com.abhitom.mausamessence.databinding.FragmentSettingsBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     lateinit var prefs:SharedPreferences
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +32,8 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toggleButtonCheckListener()
+
+        changeBackground()
 
         if (DashBoard.settingsFragment.isVisible) {
             prefs = context!!.getSharedPreferences(
@@ -50,6 +51,35 @@ class SettingsFragment : Fragment() {
                 prefs.edit()
                     .putString("Name", _binding!!.textInputUserName.editText?.text.toString())
                     .apply()
+            }
+        }
+    }
+
+    private fun changeBackground() {
+        val currentTime: Long = System.currentTimeMillis()
+        val currentTimeDate = Date(currentTime)
+        val currentTimeFormat = SimpleDateFormat("HH").format(currentTimeDate)
+
+        when {
+            (currentTimeFormat.toInt()>6) and (currentTimeFormat.toInt()<12) -> {
+                if (DashBoard.settingsFragment.isVisible) {
+                    _binding?.clSFLayout?.background = context?.let { ContextCompat.getDrawable(it, R.drawable.sunrisehd) }
+                }
+            }
+            (currentTimeFormat.toInt()>=16) and (currentTimeFormat.toInt()<21) -> {
+                if (DashBoard.settingsFragment.isVisible) {
+                    _binding?.clSFLayout?.background = context?.let { ContextCompat.getDrawable(it, R.drawable.sunsethd) }
+                }
+            }
+            (currentTimeFormat.toInt()>=12) and (currentTimeFormat.toInt()<16) -> {
+                if (DashBoard.settingsFragment.isVisible) {
+                    _binding?.clSFLayout?.background = context?.let { ContextCompat.getDrawable(it, R.drawable.noonhd) }
+                }
+            }
+            else -> {
+                if (DashBoard.settingsFragment.isVisible) {
+                    _binding?.clSFLayout?.background = context?.let { ContextCompat.getDrawable(it, R.drawable.nighthd) }
+                }
             }
         }
     }

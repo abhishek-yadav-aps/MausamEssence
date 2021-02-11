@@ -12,13 +12,23 @@ class ReportAdapter(val list: MutableList<OneDay>) : RecyclerView.Adapter<Report
     class ReportViewHolder(private val itemBinding: OneDayCardviewBinding) : RecyclerView.ViewHolder
     (itemBinding.root){
         fun bind(obj: OneDay){
-            itemBinding.textMin.text = obj.minTemp
-            itemBinding.txtMax.text = obj.maxTemp
-            itemBinding.txtDay.text = obj.Dday
-            itemBinding.txtDate.text = obj.Ddate
-            itemBinding.txtSunrise.text = obj.Sunrise
-            itemBinding.txtSunset.text = obj.Sunset
-            itemBinding.textWindSpeed.text = obj.WindSpeed
+            itemBinding.tvDay.text = obj.Dday
+            itemBinding.tvDate.text = obj.Ddate
+            if (DashBoard.units=="metric"){
+                val windSpeed=obj.WindSpeed+" m/s"
+                itemBinding.tvWindSpeed.text = windSpeed
+                val minTemp= obj.minTemp+ " °C"
+                val maxTemp= obj.maxTemp+ " °C"
+                itemBinding?.tvMin?.text=minTemp
+                itemBinding?.tvMax?.text=maxTemp
+            }else{
+                val windSpeed=obj.WindSpeed+" miles/s"
+                itemBinding.tvWindSpeed.text = windSpeed
+                val minTemp= obj.minTemp+ " °F"
+                val maxTemp= obj.maxTemp+ " °F"
+                itemBinding?.tvMin?.text=minTemp
+                itemBinding?.tvMax?.text=maxTemp
+            }
         }
     }
 

@@ -20,6 +20,7 @@ import com.abhitom.mausamessence.fragments.*
 import com.abhitom.mausamessence.retrofit.OneCallResponse
 import com.abhitom.mausamessence.retrofit.OneDay
 import com.abhitom.mausamessence.retrofit.RetroFitClient
+import com.abhitom.mausamessence.retrofit.ReverseGeoCodingResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,8 +57,10 @@ class DashBoard : AppCompatActivity() {
         lateinit var data: Response<OneCallResponse>
         var reportList: MutableList<OneDay> = mutableListOf()
         var isReportDone=false
+        var isCityFetched=false
         var apiKey="22147f19dfcc656710c95cabb152527a"
         var userName=""
+        var currentCity=""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +104,7 @@ class DashBoard : AppCompatActivity() {
 
     //function to fetch data from api
     fun getData(finalLocation: Location) {
+
         RetroFitClient.instance.service.oneCallApi(finalLocation.latitude, finalLocation.longitude, apiKey, units)
             .enqueue(object : Callback<OneCallResponse> {
                 override fun onResponse(
@@ -124,6 +128,34 @@ class DashBoard : AppCompatActivity() {
                     toastMaker("No Internet / Server Down", currentFragment)
                 }
             })
+
+        RetroFitClient.instance.service.reverseGeoCoding(finalLocation.latitude, finalLocation.longitude, apiKey, 1)
+            .enqueue(object : Callback<List<ReverseGeoCodingResponse>> {
+                override fun onResponse(
+                    call: Call<List<ReverseGeoCodingResponse>>,
+                    response: Response<List<ReverseGeoCodingResponse>>
+                ) {
+
+                    if (response.isSuccessful) {
+                        if(response.body()!!.isNotEmpty()) {
+                            currentCity =
+                                response.body()!![0].name + ", " + response.body()!![0].country
+                            listenerCurrent?.methodCurrentCity(currentCity,true)
+                            isCityFetched=true
+                        }else{
+                            listenerCurrent?.methodCurrentCity("", false)
+                            isCityFetched=false
+                        }
+                    } else {
+
+                        toastMaker(response.errorBody().toString(),currentFragment)
+                    }
+                }
+
+                override fun onFailure(call: Call<List<ReverseGeoCodingResponse>>, t: Throwable) {
+                    toastMaker("No Internet / Server Down", currentFragment)
+                }
+            })
     }
 
     private fun getDataForReport(response: Response<OneCallResponse>) {
@@ -140,7 +172,7 @@ class DashBoard : AppCompatActivity() {
             val sunsetdf = Date(sunset)
             val sunrisevv = SimpleDateFormat("hh:mm a").format(sunrisedf)
             val sunsetvv = SimpleDateFormat("hh:mm a").format(sunsetdf)
-            list.add(OneDay(dayOfWeek, date, sunrisevv, sunsetvv, response.body()!!.daily?.get(i)?.temp?.max.toString(), response.body()!!.daily?.get(i)?.temp?.max.toString(), response.body()!!.daily?.get(i)?.windSpeed.toString() ))
+            list.add(OneDay(dayOfWeek, date, sunrisevv, sunsetvv, response.body()!!.daily?.get(i)?.temp?.max.toString(), response.body()!!.daily?.get(i)?.temp?.min.toString(), response.body()!!.daily?.get(i)?.windSpeed.toString() ))
         }
         isReportDone=true
         reportList=list

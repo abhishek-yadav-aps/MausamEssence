@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/arbutus"
-        android:text="Hi, Abhishek!"
+        android:text="@string/hi_user"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,6 +26,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/spinner_background"
+        android:padding="12dp"
         android:textColor="#F9F7F7"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/spin_city"
@@ -40,29 +44,32 @@
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/white"
         android:textAlignment="center"
+        android:background="@android:color/transparent"
+        android:popupBackground="@android:color/transparent"
         app:layout_constraintBottom_toTopOf="@+id/txt_temp"
         app:layout_constraintEnd_toStartOf="@+id/btnSearch"
         app:layout_constraintStart_toEndOf="@+id/tvDFDate"
         app:layout_constraintTop_toBottomOf="@+id/txt_username_1" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:backgroundTint="#F7F5F5"
-        android:text="search"
+        android:background="@drawable/spinner_background"
+        android:padding="12dp"
+        android:src="@drawable/ic_baseline_search_24"
         android:textColor="#090808"
         app:layout_constraintBottom_toBottomOf="@+id/spin_city"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spin_city" />
+        app:layout_constraintTop_toTopOf="@+id/spin_city"
+        android:contentDescription="@string/search_button" />
 
     <TextView
         android:id="@+id/txt_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="25"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +83,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="°C"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/txt_temp"
         app:layout_constraintTop_toTopOf="@+id/txt_temp" />
@@ -86,7 +92,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="weather"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:text="Sunrise"
+                android:text="@string/sunrise"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_sunrise" />
 
@@ -128,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                android:text="Sunset"
+                android:text="@string/sunset"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_sunset" />
 
@@ -137,7 +142,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="time"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView5"
@@ -149,7 +153,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="time"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView6"
@@ -162,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
-                android:text="Feels Like"
+                android:text="@string/feels_like"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -172,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="28dp"
-                android:text="Humidity"
+                android:text="@string/humidity"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -181,7 +184,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="16 F"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView9"
@@ -193,7 +195,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="36%"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView10"
@@ -206,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
-                android:text="Pressure"
+                android:text="@string/pressure"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_feels_like" />
 
@@ -216,7 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
-                android:text="Visibility"
+                android:text="@string/visibility"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_humidity" />
 
@@ -225,7 +226,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="1014.hPa"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView13"
@@ -237,7 +237,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="0"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView14"
@@ -250,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
-                android:text="Wind Speed"
+                android:text="@string/wind_speed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_pressure" />
 
@@ -259,7 +258,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="8.1km/h"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView17"
@@ -272,7 +270,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
-                android:text="UV Index"
+                android:text="@string/uv_index"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_visiblity" />
 
@@ -281,7 +279,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="0"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/textView19"
@@ -297,7 +294,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:text=" 30 °C"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/txt_weather"
         app:layout_constraintStart_toStartOf="parent"
@@ -308,7 +304,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:text="20 °C"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/txt_weather"
         app:layout_constraintEnd_toEndOf="parent"

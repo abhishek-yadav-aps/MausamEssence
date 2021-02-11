@@ -4,4 +4,15 @@
     <string name="content_description_search">for searching locations by city</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location">Location</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="feels_like">Feels Like</string>
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
+    <string name="visibility">Visibility</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="uv_index">UV Index</string>
+    <string name="hi_user">Hi, User!</string>
+    <string name="search_button">Search Button</string>
 </resources>

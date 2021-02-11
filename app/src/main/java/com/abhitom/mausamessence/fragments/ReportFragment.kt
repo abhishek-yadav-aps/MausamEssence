@@ -14,6 +14,7 @@ import com.abhitom.mausamessence.R
 import com.abhitom.mausamessence.ReportAdapter
 import com.abhitom.mausamessence.databinding.FragmentReportBinding
 import com.abhitom.mausamessence.retrofit.OneDay
+import com.google.android.gms.maps.model.Dash
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,6 +34,15 @@ class ReportFragment : Fragment(),InterfaceReport {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBackground()
+        binding?.txtUsername?.text="Hi, "+DashBoard.userName
+        if (DashBoard.isDataSaved) {
+            if (!DashBoard.isCityFetched) {
+                binding?.txtLocation?.text = DashBoard.data.body()?.timezone
+            }
+        }
+        if (DashBoard.isCityFetched){
+            binding?.txtLocation?.text = DashBoard.currentCity
+        }
 
         if (DashBoard.isReportDone){
             binding?.rv7Day?.layoutManager = LinearLayoutManager(context, LinearLayoutManager
