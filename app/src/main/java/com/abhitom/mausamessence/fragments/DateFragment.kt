@@ -249,7 +249,8 @@ class DateFragment : Fragment(),DatePickerDialog.OnDateSetListener, AdapterView.
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        binding?.tvDFDate?.text=dayOfMonth.toString()+"-"+(month+1).toString()+"-"+year.toString()
+        val date=dayOfMonth.toString()+"-"+(month+1).toString()+"-"+year.toString()
+        binding?.tvDFDate?.text=date
         dayOfMonthSaver=dayOfMonth
         yearSaver=year
         monthSaver=month

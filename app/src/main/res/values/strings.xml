@@ -15,4 +15,8 @@
     <string name="uv_index">UV Index</string>
     <string name="hi_user">Hi, User!</string>
     <string name="search_button">Search Button</string>
+    <string name="what_do_we_call_you">What do we call you?</string>
+    <string name="welcomes_you">Welcomes you!</string>
+    <string name="next">NEXT</string>
+    <string name="username">Username</string>
 </resources>

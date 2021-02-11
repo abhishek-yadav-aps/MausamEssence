@@ -39,10 +39,10 @@ class DashBoard : AppCompatActivity() {
     private var listenerReport: InterfaceReport? = null
     private lateinit var prefs: SharedPreferences
 
-    fun setListenercurrent(listener: InterfaceCurrent?) {
+    private fun setListenerCurrent(listener: InterfaceCurrent?) {
         this.listenerCurrent = listener
     }
-    fun setListenerReport(listenerReport: InterfaceReport?) {
+    private fun setListenerReport(listenerReport: InterfaceReport?) {
         this.listenerReport = listenerReport
     }
 
@@ -81,7 +81,7 @@ class DashBoard : AppCompatActivity() {
         binding.bottomNavigationView.background = null
         binding.bottomNavigationView.menu.getItem(2).isEnabled = false
 
-        setListenercurrent(currentFragment)
+        setListenerCurrent(currentFragment)
         setListenerReport(reportFragment)
 
         setCurrentFragment(currentFragment)
@@ -159,7 +159,7 @@ class DashBoard : AppCompatActivity() {
     }
 
     private fun getDataForReport(response: Response<OneCallResponse>) {
-        var list: MutableList<OneDay> = mutableListOf()
+        val list: MutableList<OneDay> = mutableListOf()
 
         for (i in 0 until response.body()?.daily?.size!!){
             val day: Long = response.body()?.daily!![i]?.dt.let { it?.let { it1 -> java.lang.Long.valueOf(it1) } }!! * 1000

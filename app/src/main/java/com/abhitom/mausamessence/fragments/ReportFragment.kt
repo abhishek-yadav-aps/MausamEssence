@@ -34,7 +34,8 @@ class ReportFragment : Fragment(),InterfaceReport {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBackground()
-        binding?.txtUsername?.text="Hi, "+DashBoard.userName
+        val userNameText="Hi, "+DashBoard.userName+"!"
+        binding?.txtUsername?.text=userNameText
         if (DashBoard.isDataSaved) {
             if (!DashBoard.isCityFetched) {
                 binding?.txtLocation?.text = DashBoard.data.body()?.timezone
@@ -83,7 +84,6 @@ class ReportFragment : Fragment(),InterfaceReport {
     }
 
     override fun methodReport(list: MutableList<OneDay>) {
-        Log.i("TAGGER",list.toString())
         binding?.rv7Day?.layoutManager = LinearLayoutManager(context, LinearLayoutManager
             .HORIZONTAL, false)
         binding?.rv7Day?.itemAnimator = DefaultItemAnimator()

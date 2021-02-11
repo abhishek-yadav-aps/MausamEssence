@@ -41,7 +41,8 @@ class SettingsFragment : Fragment() {
                 Context.MODE_PRIVATE
             )
         }
-        _binding?.txtUsername!!.text="Hi, "+DashBoard.userName
+        val userNameText="Hi, "+DashBoard.userName
+        _binding?.txtUsername!!.text=userNameText
         _binding?.textInputUserName?.editText?.setText(DashBoard.userName)
         _binding?.btnSFSave?.setOnClickListener {
             if (!_binding!!.textInputUserName.editText?.text.isNullOrEmpty() || !_binding!!.textInputUserName.editText?.text.isNullOrBlank()) {

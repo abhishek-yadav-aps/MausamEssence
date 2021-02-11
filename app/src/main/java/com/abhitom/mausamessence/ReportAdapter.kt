@@ -7,7 +7,7 @@ import com.abhitom.mausamessence.databinding.OneDayCardviewBinding
 import com.abhitom.mausamessence.retrofit.OneDay
 
 
-class ReportAdapter(val list: MutableList<OneDay>) : RecyclerView.Adapter<ReportAdapter.ReportViewHolder>() {
+class ReportAdapter(private val list: MutableList<OneDay>) : RecyclerView.Adapter<ReportAdapter.ReportViewHolder>() {
 
     class ReportViewHolder(private val itemBinding: OneDayCardviewBinding) : RecyclerView.ViewHolder
     (itemBinding.root){
@@ -19,15 +19,15 @@ class ReportAdapter(val list: MutableList<OneDay>) : RecyclerView.Adapter<Report
                 itemBinding.tvWindSpeed.text = windSpeed
                 val minTemp= obj.minTemp+ " °C"
                 val maxTemp= obj.maxTemp+ " °C"
-                itemBinding?.tvMin?.text=minTemp
-                itemBinding?.tvMax?.text=maxTemp
+                itemBinding.tvMin.text =minTemp
+                itemBinding.tvMax.text =maxTemp
             }else{
                 val windSpeed=obj.WindSpeed+" miles/s"
                 itemBinding.tvWindSpeed.text = windSpeed
                 val minTemp= obj.minTemp+ " °F"
                 val maxTemp= obj.maxTemp+ " °F"
-                itemBinding?.tvMin?.text=minTemp
-                itemBinding?.tvMax?.text=maxTemp
+                itemBinding.tvMin.text =minTemp
+                itemBinding.tvMax.text =maxTemp
             }
         }
     }
